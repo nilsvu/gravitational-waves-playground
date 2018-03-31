@@ -5,9 +5,9 @@
 	<key>Version</key>
 	<string>1.0</string>
 	<key>Name</key>
-	<string>CBC</string>
+	<string>A first look</string>
 	<key>Description</key>
-	<string>CBC</string>
+	<string>Get a first look at the black hole binary system that produced the gravitational waves observed in September 2015.</string>
 	<key>LiveViewMode</key>
 	<string>VisibleByDefault</string>
 	<key>LiveViewEdgeToEdge</key>

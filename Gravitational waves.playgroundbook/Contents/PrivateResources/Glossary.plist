@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Terms</key>
+	<dict>
+		<key>first_detection</key>
+		<dict>
+			<key>Definition</key>
+			<string>When gravitational waves reach us on Earth, billions of years after the event happened, they have decayed to minute amplitudes that are barely measurable. However, measuring these waves can give us insight into the fascinating nature of space, time and gravity in our Universe, and about the extreme astrophysical events that produced them. Discoveries of this type have resulted in profound strides in technology before, such as in space travel and GPS technologies. So over multiple decades, thousands of engineers and physicists from all over the world collaborated to build the LIGO gravitational wave detectors in Livingston, Louisiana and Hanford, Washington that started to take data in September 2015. Four days before they were even officially switched on, both detectors registered a tiny, but clearly distinguishable, oscillating shift in spacetime - they had successfully observed a gravitational wave passing through earth! Physicists were quick to determine that this first detection, that was given the name [GW150914](https://en.wikipedia.org/wiki/First_observation_of_gravitational_waves), must have originated in a distant galaxy over one billion light years away by two inspiralling and eventually merging black holes. More events have been detected since, and the [Nobel Prize in Physics 2017](https://www.nobelprize.org/nobel_prizes/physics/laureates/2017/) was awarded to the LIGO pioneers Rainer Weiss, Barry C. Barish and Kip S. Thorne _for decisive contributions to the LIGO detector and the observation of gravitational waves_.</string>
+			<key>Title</key>
+			<string>The first detection of gravitational waves</string>
+			<key>FirstUse</key>
+			<dict>
+				<key>PageReference</key>
+				<string>Gravitational%20Waves/A%20first%20look</string>
+				<key>Title</key>
+				<string>A first look</string>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>

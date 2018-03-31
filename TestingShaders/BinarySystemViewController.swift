@@ -10,12 +10,12 @@
  
  - Compile in Xcode to generate Metal library.
  - Copy the following assets to <PlaygroundBook>/Contents/PrivateResources/:
- - CBCScene.scn
- - volume_rendering_technique.plist
- - Products/<ProductName>.app/default.metallib
- - volume_rendering.metal (optional)
- - art.scnassets/
- - Assets.xcassets/restart_icon
+    - CBCScene.scn
+    - volume_rendering_technique.plist
+    - Products/<ProductName>.app/default.metallib
+    - volume_rendering.metal (optional)
+    - art.scnassets/
+    - Assets.xcassets/restart_icon
  
  */
 
@@ -27,15 +27,20 @@ import MetalKit
 /// A system of two black holes that inspirals and merges, emitting gravitational waves
 public struct BinarySystem {
     
-    public let firstMass: Float = 35
-    public let secondMass: Float = 30
+    public let firstMass: Float
+    public let secondMass: Float
     
+    public init(firstMass: Float = 35, secondMass: Float = 30) {
+        self.firstMass = firstMass
+        self.secondMass = secondMass
+    }
+
     public var totalMass: Float { return firstMass + secondMass }
     
     public var chirpMass: Float {
         return pow(firstMass * secondMass, 3 / 5) / pow(totalMass, 1 / 5)
     }
-    
+
 }
 
 /// A polarization state of a gravitational wave.
@@ -61,14 +66,16 @@ public struct VisualConfiguration {
     public var secondaryNegativeColor: UIColor? = nil
     /// Color chosen for small negative field values
     public var tertiaryNegativeColor: UIColor? = nil
-    
+
     /// Size of smallest substructure that the volume rendering can resolve. Lowering this value can heavily decrease rendering framerate.
-    public var resolution: Float = 0.5
+    public var resolution: Float = 0.4
     /// The increase in opacity when looking through one unit of distance. Lower values make the volume rendering appear more transparent.
     public var opticalDensity: Float = 0.25
     
     /// Enable to visualize the physical quantity Psi4 that scales with the frequency squared, instead of the gravitational wave strain
     public var showFrequencyScaling: Bool = false
+    
+    public init() {}
 }
 
 public class BinarySystemViewController: UIViewController, SCNSceneRendererDelegate, ARSCNViewDelegate, ARSessionDelegate {
@@ -83,25 +90,25 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
     private let ringdownAmplitudeScale: Float = 0.5 // Amplitude of ringdown in world coordinates (order 1)
     private let ringdownTimeScale: Float = 0.5 // Seconds for ringdown amplitude to decay by 1/e
     private let ringdownFrequency: Float = 1.0 // Frequency of ringdown in Hz
-    
+
     
     // MARK: Scene setup
-    
+  
     private lazy var simulationView: SCNView = {
         let view = SCNView(frame: .zero)
         view.rendersContinuously = true
         view.scene = self.scene
-        //        view.session = self.session
+//        view.session = self.session
         view.autoenablesDefaultLighting = true
         view.allowsCameraControl = true
-        view.showsStatistics = true
+//        view.showsStatistics = true
         view.debugOptions = [
-            //            ARSCNDebugOptions.showFeaturePoints,
-            //            ARSCNDebugOptions.showWorldOrigin,
-            //            .showBoundingBoxes,
-            //            .showWireframe,
-            //            .showPhysicsShapes,
-            //            .showCameras
+//            ARSCNDebugOptions.showFeaturePoints,
+//            ARSCNDebugOptions.showWorldOrigin,
+//            .showBoundingBoxes,
+//            .showWireframe,
+//            .showPhysicsShapes,
+//            .showCameras
         ]
         view.delegate = self
         return view
@@ -140,7 +147,7 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         worldTracking.planeDetection = .horizontal
         return worldTracking
     }()
-    
+
     
     // MARK: Nodes
     
@@ -151,7 +158,7 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         node.geometry?.setValue(Float(self.objectSizeScale), forKey: "objectSizeScale")
         node.geometry?.setValue(Float(self.timeScale), forKey: "timeScale")
         return node
-    }()
+   }()
     private lazy var secondObject: SCNNode = {
         let node = self.scene.rootNode.childNode(withName: "second_object", recursively: true)!
         node.geometry?.shaderModifiers = [ .geometry: self.objectGeometryShaderModifier ]
@@ -175,7 +182,7 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
     private lazy var sourcePosition: SCNVector3 = {
         self.remnant.position
     }()
-    
+
     
     // MARK: Object geometry shading setup
     
@@ -195,8 +202,8 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
 
         float t = (scn_frame.time - mergerTime) * timeScale;
         float f = pow(chirpMass, -5.0 / 8.0) * pow(abs(t), -3.0 / 8.0);
-                
-        float orbitalAngle = M_PI_F * pow(f * chirpMass, -5.0 / 3.0) + initialOrbitalAngle;
+
+        float orbitalAngle = step(0.0, -t) * M_PI_F * pow(f * chirpMass, -5.0 / 3.0) + initialOrbitalAngle;
         float orbitalSeparation = orbitalSeparationScale * pow(chirpMass / 4.0, 1.0 / 3.0) * pow(M_PI_F * f, -2.0 / 3.0);
         float3 x = float3(orbitalSeparationFraction * orbitalSeparation, M_PI_2_F, orbitalAngle);
         float3 objectCenter = x.x * float3(cos(x.z) * sin(x.y), cos(x.y), -sin(x.z) * sin(x.y));
@@ -222,7 +229,6 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
 
         #pragma body
         float t = (scn_frame.time - mergerTime) * timeScale;
-        if (t > 0.0) {
         float3 objectRadialUnit = _geometry.normal;
         float theta = atan2(length(objectRadialUnit.xz), objectRadialUnit.y) + M_PI_F;
         float phi = atan2(-objectRadialUnit.z, objectRadialUnit.x) + M_PI_F + initialOrbitalAngle;
@@ -230,9 +236,8 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         float vertexDistance = objectSizeScale * schwarzschildRadius * (1.0 + ringdownAmplitude * (pow(sin(theta) * sin(2 * M_PI_F * ringdownFrequency * t / timeScale + phi), 2.0) - 0.5));
         
         _geometry.position = float4(vertexDistance * objectRadialUnit, 1.0);
-        }
         """
-    
+
     
     // MARK: Public interface
     
@@ -240,12 +245,12 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
     private var timeToMerger: TimeInterval = 15
     
     /// Simulates a binary system that merges in `timeToMerger` (real-time) seconds from now.
-    public func simulate(binarySystem: BinarySystem, mergingIn timeToMerger: TimeInterval) {
+    public func simulate(_ binarySystem: BinarySystem, mergingIn timeToMerger: TimeInterval) {
         self.binarySystem = binarySystem
         self.timeToMerger = timeToMerger
         self.restartSimulation()
     }
-    
+
     /// Restarts the simulation.
     public func restartSimulation() {
         guard let initialSceneTime = self.initialSceneTime else {
@@ -267,7 +272,7 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         volumeRendering.setValue(Float(binarySystem.chirpMass), forKey: "chirpMass")
         volumeRendering.setValue(Float(2 * binarySystem.firstMass * objectSizeScale), forKey: "firstObjectRadius")
         volumeRendering.setValue(Float(2 * binarySystem.secondMass * objectSizeScale), forKey: "secondObjectRadius")
-        
+
         // Configure object geometry shading
         firstObject.geometry?.setValue(Float(2 * binarySystem.firstMass), forKey: "schwarzschildRadius");
         firstObject.geometry?.setValue(Float(binarySystem.chirpMass), forKey: "chirpMass");
@@ -281,23 +286,22 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         secondObject.geometry?.setValue(Float(mergerTime), forKey: "mergerTime");
         remnant.geometry?.setValue(Float(2 * binarySystem.totalMass), forKey: "schwarzschildRadius");
         remnant.geometry?.setValue(Float(binarySystem.chirpMass), forKey: "chirpMass");
-        remnant.geometry?.setValue(Float.pi / 2, forKey: "initialOrbitalAngle");
+        remnant.geometry?.setValue(Float(0), forKey: "initialOrbitalAngle");
         remnant.geometry?.setValue(Float(mergerTime), forKey: "mergerTime");
         
-        // Show and hide nodes
         remnant.removeAllActions()
         remnant.opacity = 0
-        remnant.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger)), .fadeOpacity(to: 1, duration: 0) ]))
+        remnant.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger - 0.2)), .fadeOpacity(to: 1, duration: 0) ]))
         firstObject.removeAllActions()
-        firstObject.isHidden = false
-        firstObject.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger)), .hide() ]))
+        firstObject.opacity = 1
+        firstObject.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger)), .fadeOpacity(to: 0, duration: 0) ]))
         secondObject.removeAllActions()
-        secondObject.isHidden = false
-        secondObject.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger)), .hide() ]))
+        secondObject.opacity = 1
+        secondObject.runAction(.sequence([ .wait(duration: TimeInterval(timeToMerger)), .fadeOpacity(to: 0, duration: 0) ]))
     }
     
     /// Applies a visual configuration to the scene.
-    public func apply(_ visualConfiguration: VisualConfiguration) {
+    private func apply(_ visualConfiguration: VisualConfiguration) {
         applyVolumeRenderingColor(visualConfiguration.primaryPositiveColor, forParameter: "primaryPositiveColor", defaultComponents: [ 1, 0, 0, 1 ])
         applyVolumeRenderingColor(visualConfiguration.secondaryPositiveColor, forParameter: "secondaryPositiveColor", defaultComponents: [ 0, 0, 1, 1 ])
         applyVolumeRenderingColor(visualConfiguration.tertiaryPositiveColor, forParameter: "tertiaryPositiveColor", defaultComponents: [ 0, 0, 0, 0 ])
@@ -340,10 +344,21 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         button.addTarget(self, action: #selector(BinarySystemViewController.restartButtonPressed(sender:)), for: .touchUpInside)
         return button
     }()
-    
+
     
     // MARK: View lifecycle
-    
+
+    public var visualConfiguration: VisualConfiguration? = nil {
+        didSet {
+            if let visualConfiguration = visualConfiguration {
+                self.apply(visualConfiguration)
+            } else {
+                let visualConfiguration = VisualConfiguration()
+                self.visualConfiguration = visualConfiguration
+                self.apply(visualConfiguration)
+            }
+        }
+    }
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -356,7 +371,9 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         restartButton.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
         
         // Apply default visual configuration
-        self.apply(VisualConfiguration())
+        if self.visualConfiguration == nil {
+            self.visualConfiguration = VisualConfiguration()
+        }
     }
     
     @IBAction func restartButtonPressed(sender: UIButton) {
@@ -373,18 +390,18 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
             simulationView.technique = volumeRendering
             
         }
-        
+
         // Run AR world tracking
-        //        session.run(worldTracking, options: [
-        //            .resetTracking, .removeExistingAnchors
-        //            ])
+//        session.run(worldTracking, options: [
+//            .resetTracking, .removeExistingAnchors
+//            ])
         
         // This is the timestamp where the scn_frame.time in the Metal shaders begins
         self.initialSceneTime = Date.timeIntervalSinceReferenceDate
         
         restartSimulation()
     }
-    
+
     
     // MARK: SCNSceneRendererDelegate
     
@@ -408,5 +425,5 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
             return .all
         }
     }
-    
+
 }

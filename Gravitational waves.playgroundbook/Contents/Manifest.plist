@@ -11,15 +11,15 @@
 	<key>SwiftVersion</key>
 	<string>3.2</string>
 	<key>MinimumSwiftPlaygroundsVersion</key>
-	<string>1.2</string>
+	<string>2.0</string>
 	<key>DevelopmentRegion</key>
 	<string>en_EN</string>
 	<key>Name</key>
 	<string>Gravitational waves</string>
 	<key>Subtitle</key>
-	<string>Play with gravitational waves</string>
+	<string>Make gravitational waves visible 🔦</string>
 	<key>Description</key>
-	<string>Explore the physics of gravitational waves in the theory of general relativity</string>
+	<string>Explore and visualize the gravitational radiation that a binary system of two black holes emits in its evolution.</string>
 	<key>DeploymentTarget</key>
 	<string>ios11.0</string>
 	<key>ImageReference</key>
