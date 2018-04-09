@@ -30,12 +30,13 @@ float3 polarToCartesian(float3 x) {
 /// Gravitational wave emission and orbital rotation frequency
 float frequency(float t_ret, float chirpMass) {
     return pow(chirpMass, -5.0 / 8.0) * pow(abs(t_ret), -3.0 / 8.0);
+//    return pow(chirpMass, -5.0 / 8.0) * pow(15.0 * 200.0, -3.0 / 8.0);
 }
 
 /// Position of the black holes in inspiraling orbit around each other
 float3 objectPosition(float t, float chirpMass, float initialOrbitalAngle, float orbitalSeparationScale, float orbitalSeparationFraction) {
     float f = frequency(t, chirpMass);
-    float orbitalAngle = M_PI_F * pow(f * chirpMass, -5.0 / 3.0) + initialOrbitalAngle;
+    float orbitalAngle = M_PI_F * pow(f * chirpMass, -5.0 / 3.0)/*f * -t*/ + initialOrbitalAngle;
     float orbitalSeparation = orbitalSeparationScale * pow(chirpMass / 4.0, 1.0 / 3.0) * pow(M_PI_F * f, -2.0 / 3.0);
     return polarToCartesian(float3(orbitalSeparationFraction * orbitalSeparation, M_PI_2_F, orbitalAngle));
 }
@@ -233,10 +234,8 @@ fragment half4 renderVolume(VolumeRenderingVertexIO in [[stage_in]],
 
         // Decide for a color based on field value
         float4 color;
-//        if (fieldValue <= parameters.upperThreshold && fieldValue > parameters.middleThreshold) {
         if (fieldValue > 0.7) {
             color = parameters.primaryPositiveColor;
-//        } else if (fieldValue > parameters.lowerThreshold) {
         } else if (fieldValue > 0.5) {
             color = parameters.secondaryPositiveColor;
         } else if (fieldValue > 0.3) {

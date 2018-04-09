@@ -61,16 +61,16 @@ public struct VisualConfiguration {
     /// Color chosen for small positive field values
     public var tertiaryPositiveColor: UIColor? = nil
     /// Colors chosen for large negative field values
-    public var primaryNegativeColor: UIColor? = .yellow
+    public var primaryNegativeColor: UIColor? = .green
     /// Color chosen for intermediate negative field values
     public var secondaryNegativeColor: UIColor? = nil
     /// Color chosen for small negative field values
     public var tertiaryNegativeColor: UIColor? = nil
 
     /// Size of smallest substructure that the volume rendering can resolve. Lowering this value can heavily decrease rendering framerate.
-    public var resolution: Float = 0.4
+    public var resolution: Float = 0.3
     /// The increase in opacity when looking through one unit of distance. Lower values make the volume rendering appear more transparent.
-    public var opticalDensity: Float = 0.25
+    public var opticalDensity: Float = 0.3
     
     /// Enable to visualize the physical quantity Psi4 that scales with the frequency squared, instead of the gravitational wave strain
     public var showFrequencyScaling: Bool = false
@@ -80,6 +80,8 @@ public struct VisualConfiguration {
 
 public class BinarySystemViewController: UIViewController, SCNSceneRendererDelegate, ARSCNViewDelegate, ARSessionDelegate {
     
+    private var binarySystem = BinarySystem()
+    private var timeToMerger: TimeInterval = 15
     
     // MARK: Scales
     
@@ -201,9 +203,9 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         #pragma body
 
         float t = (scn_frame.time - mergerTime) * timeScale;
-        float f = pow(chirpMass, -5.0 / 8.0) * pow(abs(t), -3.0 / 8.0);
+        float f = pow(chirpMass, -5.0 / 8.0) * pow(abs(t), -3.0 / 8.0);//pow(chirpMass, -5.0 / 8.0) * pow(15.0 * 200.0, -3.0 / 8.0);
 
-        float orbitalAngle = step(0.0, -t) * M_PI_F * pow(f * chirpMass, -5.0 / 3.0) + initialOrbitalAngle;
+        float orbitalAngle = step(0.0, -t) * M_PI_F * pow(f * chirpMass, -5.0 / 3.0)/*f * -t*/ + initialOrbitalAngle;
         float orbitalSeparation = orbitalSeparationScale * pow(chirpMass / 4.0, 1.0 / 3.0) * pow(M_PI_F * f, -2.0 / 3.0);
         float3 x = float3(orbitalSeparationFraction * orbitalSeparation, M_PI_2_F, orbitalAngle);
         float3 objectCenter = x.x * float3(cos(x.z) * sin(x.y), cos(x.y), -sin(x.z) * sin(x.y));
@@ -236,13 +238,11 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         float vertexDistance = objectSizeScale * schwarzschildRadius * (1.0 + ringdownAmplitude * (pow(sin(theta) * sin(2 * M_PI_F * ringdownFrequency * t / timeScale + phi), 2.0) - 0.5));
         
         _geometry.position = float4(vertexDistance * objectRadialUnit, 1.0);
+        // TODO: also update normal
         """
 
     
     // MARK: Public interface
-    
-    private var binarySystem = BinarySystem()
-    private var timeToMerger: TimeInterval = 15
     
     /// Simulates a binary system that merges in `timeToMerger` (real-time) seconds from now.
     public func simulate(_ binarySystem: BinarySystem, mergingIn timeToMerger: TimeInterval) {
@@ -369,6 +369,7 @@ public class BinarySystemViewController: UIViewController, SCNSceneRendererDeleg
         let margins = view.layoutMarginsGuide
         restartButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor).isActive = true
         restartButton.centerYAnchor.constraint(equalTo: margins.centerYAnchor).isActive = true
+        restartButton.isHidden = true
         
         // Apply default visual configuration
         if self.visualConfiguration == nil {
