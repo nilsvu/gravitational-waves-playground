@@ -1,5 +1,5 @@
 
-<p align="center"><img src="https://raw.githubusercontent.com/nilsleiffischer/cbc-playground/master/banner.png"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/nilsleiffischer/gravitational-waves-playground/master/banner.png"></p>
 
 # Gravitational waves playground
 
@@ -21,7 +21,7 @@ In this [Swift playground book](http://www.apple.com/swift/playgrounds/) you can
 ## Installation
 
 1. [Download the Swift Playgrounds App](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=908519492&mt=8&ls=1) on your iPad.
-2. [Download the Gravitational Waves playground file](https://github.com/knly/cbc-playground/raw/master/dist/Gravitational%waves.playgroundbook.zip) on your iPad or Mac:
+2. [Download the Gravitational Waves playground file](https://github.com/knly/gravitational-waves-playground/raw/master/dist/Gravitational%waves.playgroundbook.zip) on your iPad or Mac:
 
   - **On your iPad:** Select _Open with "Playgrounds"_.
 
