@@ -43,12 +43,12 @@ In this [Swift playground book](http://www.apple.com/swift/playgrounds/) you can
 
 ## Simulated physics
 
-- The rendered field is the lowest-order metric perturbation in TT-gauge (or _gravitational wave strain_) $h_\plus$ or $h_\cross$, with their $\frac{1}{r}$ distance scaling removed.
-- Selecting the option `showFrequencyScaling` is equivalent to visualising the real or imaginary part of the Weyl scalar $\Psi_4$, depending on the chosen polarization.
-- The six colors are chosen from the normalized field values discretized into bins with edges $\left{\pm 1, \pm 0.7, \pm 0.5, \pm 0.3\right}$.
-- The rotating spheres depict the relative Schwarzschild radius of the black holes, with an arbitary rescaling for visualisation.
+- The rendered field is the lowest-order metric perturbation in TT-gauge (or _gravitational wave strain_) $$h_+$$ or $$h_\times$$, with their $$\frac{1}{r}$$ distance scaling removed.
+- Selecting the option `showFrequencyScaling` is equivalent to visualizing the real or imaginary part of the Weyl scalar $$\Psi_4$$, depending on the chosen polarization.
+- The six colors are chosen from the normalized field values discretized into bins with edges $$\left\{\pm 1, \pm 0.7, \pm 0.5, \pm 0.3\right\}$$.
+- The rotating spheres depict the relative Schwarzschild radius of the black holes, with an arbitary rescaling for visualization.
 - Orbital separation, time and wave propagation speed are also arbitrarily rescaled. Relative quantities are correct, however.
-- The ringdown is modeled as a simple quadrupolar oscillation with an exponential decay in amplitude for visualisation purposes only.
+- The ringdown is modeled as a simple quadrupolar oscillation with an exponential decay in amplitude for visualization purposes only.
 
 
 ## About this project
