@@ -21,7 +21,7 @@ In this [Swift playground book](http://www.apple.com/swift/playgrounds/) you can
 ## Installation
 
 1. [Download the Swift Playgrounds App](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=908519492&mt=8&ls=1) on your iPad.
-2. [Download the Gravitational Waves playground file](https://github.com/knly/gravitational-waves-playground/raw/master/dist/Gravitational%waves.playgroundbook.zip) on your iPad or Mac:
+2. [Download the Gravitational Waves playground file](https://github.com/nilsleiffischer/gravitational-waves-playground/raw/master/dist/Gravitational%20waves.playgroundbook.zip) on your iPad or Mac:
 
   - **On your iPad:** Select _Open with "Playgrounds"_.
 
