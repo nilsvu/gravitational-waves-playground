@@ -18,6 +18,15 @@ In this [Swift playground book](http://www.apple.com/swift/playgrounds/) you can
   ![Images/perspective.gif](Images/perspective.gif)
 
 
+## Gallery
+
+![Images/gallery_rgb.gif](Images/gallery_rgb.gif)
+
+![Images/gallery_red.gif](Images/gallery_red.gif)
+
+![Images/gallery_merger.gif](Images/gallery_merger.gif)
+
+
 ## Installation
 
 1. [Download the Swift Playgrounds App](https://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=908519492&mt=8&ls=1) on your iPad.
@@ -36,15 +45,6 @@ You can also manually  [download the _Gravitational waves_ playground](https://g
   - Or **on your Mac:** [AirDrop](https://support.apple.com/en-us/HT203106) the file to your iPad and select _Open with "Playgrounds"_.
 
     ![AirDrop](Images/airdrop.png)
-
-
-## Gallery
-
-![Images/gallery_rgb.gif](Images/gallery_rgb.gif)
-
-![Images/gallery_red.gif](Images/gallery_red.gif)
-
-![Images/gallery_merger.gif](Images/gallery_merger.gif)
 
 
 ## Simulated physics
